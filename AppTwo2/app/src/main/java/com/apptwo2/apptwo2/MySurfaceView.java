@@ -4,23 +4,22 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
+import android.graphics.Path;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 
 
-// Creating a SurfaceView class
-// http://android-er.blogspot.de/2014/03/simple-surfaceview-example.html
 
 public class MySurfaceView extends View {
 
-    private int time = 0;
+    private int time_new = 0;
+    private int time_old = 0;
     private float[] data_ = new float[3];
     private Paint mPaint;
+    private Path path1 = new Path();
+    private Path path2 = new Path();
+    private Path path3 = new Path();
+    private float x,y,z;
 
     public MySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,27 +36,39 @@ public class MySurfaceView extends View {
     public void onDraw(Canvas canvas){
         float ratio = getHeight()/20;
 
-        System.out.print("onDraw is called!!!!!! \n");
-        System.out.print(data_[0]+"\n");
-        System.out.print(data_[1]+"\n");
-        System.out.print(data_[2]+"\n");
 
-        if (time == getWidth()) {
-            time = 0;
+        if (time_new == getWidth()) {
+            time_new = 0;
+
+            path1 = new Path();
+            path2 = new Path();
+            path3 = new Path();
+
         }
 
+        time_old = time_new;
+        time_new++;
+
+        x = ((getHeight() / 2) - ratio * data_[0]);
+        y = ((getHeight() / 2) - ratio * data_[1]);
+        z = ((getHeight() / 2) - ratio * data_[2]);
+
         mPaint.setColor(Color.GREEN);
-        canvas.drawPoint((float) time, (float) ((getHeight() / 2) - ratio * data_[0]), mPaint);
+        path1.lineTo(time_old, x);
+        canvas.drawPath(path1, mPaint);
+
         mPaint.setColor(Color.RED);
-        canvas.drawPoint((float) time, (float) ((getHeight() / 2) - ratio * data_[1]), mPaint);
+        path2.lineTo(time_old, y);
+        canvas.drawPath(path2, mPaint);
+
         mPaint.setColor(Color.BLUE);
-        canvas.drawPoint((float) time, (float) ((getHeight() / 2) - ratio * data_[2]), mPaint);
-        time++;
+        path3.lineTo(time_old, z);
+        canvas.drawPath(path3, mPaint);
 
-        canvas.drawPoint(getWidth()/2, getHeight()/2, mPaint);
-
-        // paint.setTextSize(18f);
-        // canvas.drawText("0", getWidth()-20f, getHeight()/2, mPaint);
+        mPaint.setTextSize(18f);
+        canvas.drawText("10 - ", getWidth()-50f, getHeight()/4, mPaint);
+        canvas.drawText("0 - ", getWidth()-50f, getHeight()/2, mPaint);
+        canvas.drawText("-10 - ", getWidth()-50f, 3*(getHeight()/4), mPaint);
     }
 
     public void saveData(float[] data){

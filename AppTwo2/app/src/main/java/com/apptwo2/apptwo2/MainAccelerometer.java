@@ -1,14 +1,12 @@
 package com.apptwo2.apptwo2;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,14 +14,7 @@ import android.widget.Toast;
 
 
 
-
-// Creating a SurfaceView class
-// http://android-er.blogspot.de/2014/03/simple-surfaceview-example.html
-
-
 public class MainAccelerometer extends AppCompatActivity implements SensorEventListener{
-
-    //private static final String LOG_TAG = MainAccelerometer.class.getSimpleName();
 
     private TextView xText;
     private SeekBar mSeekBar;
@@ -132,21 +123,17 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
         linear_acceleration[1] = event.values[1] - gravity[1];
         linear_acceleration[2] = event.values[2] - gravity[2];
 
-        data[0] = event.values[0];
-        data[1] = event.values[1];
-        data[2] = event.values[2];
+        data[0] = linear_acceleration[0];
+        data[1] = linear_acceleration[1];
+        data[2] = linear_acceleration[2];
 
 
-        xText.setText(" X: " + linear_acceleration[0] + "\n Y: " + linear_acceleration[1] +
-                "\n Z: " + linear_acceleration[2] + "\n Magnitude: "+ acceleration);
+        xText.setText(" X (green): " + linear_acceleration[0] + "\n Y (red): " + linear_acceleration[1] +
+                "\n Z (blue): " + linear_acceleration[2] + "\n Magnitude: "+ acceleration);
 
 
         view.saveData(data);
         view.invalidate();
-        //Canvas canvas = new Canvas();
-        //MySurfaceView view = (MySurfaceView)findViewById(R.id.surfaceView);
-        //view.drawSomething(linear_acceleration);
-
     }
 }
 
