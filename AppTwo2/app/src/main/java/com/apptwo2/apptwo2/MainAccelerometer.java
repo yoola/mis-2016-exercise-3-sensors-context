@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +40,8 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.surfaceview_acc);
-        view = new MySurfaceView(this);
+        view = (MySurfaceView) findViewById(R.id.surfaceView);
+
 
 
         // Get an instance to the accelerometer
