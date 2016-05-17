@@ -4,40 +4,47 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
+// Creating a SurfaceView class
+// http://android-er.blogspot.de/2014/03/simple-surfaceview-example.html
 
 
-public class MySurfaceView extends SurfaceView {
+public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback{
 
     private SurfaceHolder surfaceHolder;
-    private Canvas canvas;
+    private int time = 0;
+    public float[] data_ = new float[3];
+    //private float[] linear_acceleration = new float[3];
 
 
-    public MySurfaceView() {
-        super(null);
-        init();
-    }
+
 
     public MySurfaceView(Context context) {
         super(context);
-        init();
+        getHolder().addCallback(this);
+        //init();
     }
 
     public MySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        getHolder().addCallback(this);
+        //init();
     }
 
     public MySurfaceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        getHolder().addCallback(this);
+        //init();
     }
 
-    private void init(){
+    /*private void init(){
         surfaceHolder = getHolder();
 
         surfaceHolder.addCallback(new SurfaceHolder.Callback(){
@@ -45,7 +52,7 @@ public class MySurfaceView extends SurfaceView {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 canvas = holder.lockCanvas(null);
-                drawSomething(new float[]{1f, 0.5f, 0.7f});
+                //drawSomething(new float[]{8.0f,7.0f,8.4f});
                 holder.unlockCanvasAndPost(canvas);
             }
 
@@ -60,25 +67,80 @@ public class MySurfaceView extends SurfaceView {
                 // TODO Auto-generated method stub
 
             }});
-    }
 
-    protected void drawSomething(float[] linear_acceleration) {
+
+    }*/
+
+
+
+    public void onDraw(Canvas canvas){
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(3);
-        paint.setColor(Color.GREEN);
         float ratio = getHeight()/20;
 
-        for(int i = 0; i<getWidth(); i++){
+        //if (time == getWidth()) {
+        //    time = 0;
+        //}
 
-            canvas.drawPoint((float)i, (float)((getHeight()/2) - ratio * 2.56), paint);
+        for(int i = 0; i <getWidth(); i++){
+            paint.setColor(Color.GREEN);
+            canvas.drawPoint(getWidth()/2, (float) ((getHeight() / 2) - ratio * data_[0]), paint);
+            paint.setColor(Color.RED);
+            canvas.drawPoint(getWidth()/2, (float) ((getHeight() / 2) - ratio * data_[1]), paint);
+            paint.setColor(Color.BLUE);
+            canvas.drawPoint(getWidth()/2, (float) ((getHeight() / 2) - ratio * data_[2]), paint);
+            //time++;
         }
 
+
+        System.out.print("onDraw is called!!!!!! \n");
+        System.out.print(data_[0]+"\n");
+        System.out.print(data_[1]+"\n");
+        System.out.print(data_[2]+"\n");
         canvas.drawPoint(getWidth()/2, getHeight()/2, paint);
         paint.setTextSize(18f);
         canvas.drawText("0", getWidth()-20f, getHeight()/2, paint);
+    }
+
+    public float[] saveData(float[] data){
+
+        this.data_ = data;
+        System.out.println(data_[0]);
+        invalidate();
+        return data;
+    }
+
+
+
+
+
+
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        setWillNotDraw(false);
+        /*Canvas canvas = new Canvas();
+        try {
+            canvas = surfaceHolder.lockCanvas(null);
+            synchronized (surfaceHolder) {
+                this.onDraw(canvas);
+            }
+        } finally {
+            surfaceHolder.unlockCanvasAndPost(canvas);
+
+
+        }*/
 
     }
 
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+
+    }
 }

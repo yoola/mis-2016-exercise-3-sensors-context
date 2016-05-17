@@ -30,14 +30,16 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
     private Sensor mSensor;
     private final float[] gravity = new float[3];
     private final float[] linear_acceleration = new float[3];
+    private final float[] data = new float[3];
     private int mSensorDelay;
+    private MySurfaceView view;
 
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.surfaceview_acc);
-
+        view = new MySurfaceView(this);
 
 
         // Get an instance to the accelerometer
@@ -128,12 +130,20 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
         linear_acceleration[1] = event.values[1] - gravity[1];
         linear_acceleration[2] = event.values[2] - gravity[2];
 
+        data[0] = event.values[0];
+        data[1] = event.values[1];
+        data[2] = event.values[2];
+
 
         xText.setText(" X: " + linear_acceleration[0] + "\n Y: " + linear_acceleration[1] +
                 "\n Z: " + linear_acceleration[2] + "\n Magnitude: "+ acceleration);
 
-        MySurfaceView view = new MySurfaceView();
-        view.drawSomething(linear_acceleration);
+
+        view.saveData(data);
+        view.invalidate();
+        //Canvas canvas = new Canvas();
+        //MySurfaceView view = (MySurfaceView)findViewById(R.id.surfaceView);
+        //view.drawSomething(linear_acceleration);
 
     }
 }
