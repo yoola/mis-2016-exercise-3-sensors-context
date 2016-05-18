@@ -127,7 +127,7 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
                 "\n Z (blue): " + linear_acceleration[2] + "\n Magnitude (yellow): "+ magnitude);
 
 
-        view.saveData(linear_acceleration, magnitude);
+        view.saveData(linear_acceleration, magnitude, mSensorDelay);
         view.invalidate();
     }
 }

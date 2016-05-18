@@ -14,6 +14,8 @@ public class MySurfaceView extends View {
 
     private int time_new = 0;
     private int time_old = 0;
+    private int delay = 0;
+    private int current_delay = 0;
     private float[] data_ = new float[3];
     private float magnitude_;
     private Paint mPaint;
@@ -37,7 +39,6 @@ public class MySurfaceView extends View {
     @Override
     public void onDraw(Canvas canvas){
         float ratio = getHeight()/40;
-
 
         if (time_new == getWidth()) {
             time_new = 0;
@@ -80,12 +81,19 @@ public class MySurfaceView extends View {
         canvas.drawText("-10 - ", getWidth()-50f, 3*(getHeight()/4), mPaint);
     }
 
-    public void saveData(float[] data, float magnitude){
-        this.data_[0] = data[0];
-        this.data_[1] = data[1];
-        this.data_[2] = data[2];
-        this.magnitude_ = magnitude;
-        System.out.println(data_[0]);
-        invalidate();
+    public void saveData(float[] data, float magnitude, int del) {
+        if (current_delay < delay) {
+            invalidate();
+            current_delay++;
+        } else {
+            delay = del;
+            this.data_[0] = data[0];
+            this.data_[1] = data[1];
+            this.data_[2] = data[2];
+            this.magnitude_ = magnitude;
+            System.out.println(data_[0]);
+            invalidate();
+            current_delay = 0;
+        }
     }
 }
