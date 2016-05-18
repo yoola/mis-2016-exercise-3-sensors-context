@@ -22,7 +22,6 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
     private Sensor mSensor;
     private final float[] gravity = new float[3];
     private final float[] linear_acceleration = new float[3];
-    private final float[] data = new float[3];
     private int mSensorDelay;
     private MySurfaceView view;
 
@@ -108,11 +107,6 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
 
         final float alpha = 0.8f;
 
-        float acceleration= (float)Math.sqrt(gravity[0]*gravity[0] +
-                gravity[1]*gravity[1] +
-                gravity[2]*gravity[2]);
-
-
         // Isolate the force of gravity with the low-pass filter.
         gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
         gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
@@ -123,16 +117,17 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
         linear_acceleration[1] = event.values[1] - gravity[1];
         linear_acceleration[2] = event.values[2] - gravity[2];
 
-        data[0] = linear_acceleration[0];
-        data[1] = linear_acceleration[1];
-        data[2] = linear_acceleration[2];
+        float magnitude = (float)Math.sqrt(gravity[0]*gravity[0] +
+                gravity[1]*gravity[1] +
+                gravity[2]*gravity[2]);
+
 
 
         xText.setText(" X (green): " + linear_acceleration[0] + "\n Y (red): " + linear_acceleration[1] +
-                "\n Z (blue): " + linear_acceleration[2] + "\n Magnitude: "+ acceleration);
+                "\n Z (blue): " + linear_acceleration[2] + "\n Magnitude (yellow): "+ magnitude);
 
 
-        view.saveData(data);
+        view.saveData(linear_acceleration, magnitude);
         view.invalidate();
     }
 }
