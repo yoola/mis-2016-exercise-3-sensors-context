@@ -24,6 +24,12 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".MainFFT"
+            android:label="@string/app_name"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

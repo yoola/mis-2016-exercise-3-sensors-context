@@ -12,6 +12,8 @@ import android.content.Intent;
 public class MainActivity extends AppCompatActivity{
 
     Button mButtonAcc;
+    Button mButtonFFT;
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         mButtonAcc = (Button) findViewById(R.id.button_acc);
+        mButtonFFT = (Button) findViewById(R.id.button_fft);
 
 
     }
@@ -26,6 +29,12 @@ public class MainActivity extends AppCompatActivity{
     public void GoToAcc(View view){
 
         Intent intent = new Intent(this, MainAccelerometer.class);
+        startActivity(intent);
+    }
+
+    public void GoToFFT(View view){
+
+        Intent intent = new Intent(this, MainFFT.class);
         startActivity(intent);
     }
 

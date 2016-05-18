@@ -21,5 +21,14 @@
         android:layout_marginTop="102dp"
         android:onClick="GoToAcc"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FFT"
+        android:id="@+id/button_fft"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="202dp"
+        android:onClick="GoToFFT"/>
+
 
 </RelativeLayout>
