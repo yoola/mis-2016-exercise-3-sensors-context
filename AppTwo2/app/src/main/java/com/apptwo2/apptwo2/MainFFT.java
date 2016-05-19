@@ -1,12 +1,17 @@
 package com.apptwo2.apptwo2;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,17 +25,25 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
     private SeekBar mSeekBar;
     private SensorManager mSensorManager;
     private Sensor mSensor;
+    private MyFFTView mView;
+
     private final float[] gravity = new float[3];
     private final float[] linear_acceleration = new float[3];
-    private int mSensorDelay;
-    private MyFFTView mView;
-    private int N = 64;
     private double[] x, xInput, yInput; // Input vector size mus be a power of 2
+
+    private int mSensorDelay;
+    private int N = 64;
     private int counter = 0;
+
     private double magnitude = 0;
     private double pre_magnitude = 0;
 
-
+    private String[] action = {"You are sitting right now.", "You are walking right now.", "You are moving faster then walking right now."};
+    private String last_action = "";
+    private int action_time = 0;
+    private double[] last_magnitudes = new double[20];
+    private boolean walking = false;
+    private boolean driving = false;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +146,6 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
     // always called whenever the device is in motion
     public void onSensorChanged(SensorEvent event) {
 
-
         final float alpha = 0.8f;
 
         // Isolate the force of gravity with the low-pass filter.
@@ -167,6 +179,64 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
 
         mText.setText("Magnitude (yellow): "+ magnitude + "\n Counter: " + counter);
         mView.saveData(pre_magnitude);
+
+        last_magnitudes[action_time] = pre_magnitude; // noch pre magnitude später dann fft transformiterte mag
+
+        if (action_time == 19) {
+            String current_action = "";
+            walking = true;
+            driving = true;
+            double temp = 0.0;
+            for (double value : last_magnitudes) {
+                System.out.println(value);
+                temp = value;
+                if (value < 10 || value > -10) {
+                    walking = false;
+                    driving = false;
+                } else if (value < 15 || value > -15) {
+                    driving = false;
+                }
+
+            }
+            if (driving) {
+                current_action = action[2];
+            } else if (walking) {
+                current_action = action[1];
+            } else {
+                current_action = action[0];
+            }
+            Toast.makeText(MainFFT.this, temp + "", Toast.LENGTH_SHORT).show();
+            System.out.println(current_action);
+            newNotification(current_action); // sitting
+//            Toast.makeText(MainFFT.this, current_action, Toast.LENGTH_SHORT).show();
+
+            action_time = 0;
+        }
+        action_time++;
+
+    }
+
+    public void newNotification(String current_action) {
+        if (current_action != last_action) {
+            // http://www.vogella.com/tutorials/AndroidNotifications/article.html
+            // Prepare intent which is triggered if the notification is selected
+            Intent intent = new Intent(this, NotificationReceiverActivity.class);
+            PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+            // Build notification
+            // Actions are just fake
+            Notification noti = new Notification.Builder(this)
+                    .setContentTitle(current_action)
+                    .setContentText("Subject").setSmallIcon(R.drawable.icon)
+                    .setContentIntent(pIntent)
+                    .addAction(R.drawable.icon, "See information.", pIntent).build();
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            // hide the notification after its selected
+            noti.flags |= Notification.FLAG_AUTO_CANCEL;
+
+            notificationManager.notify(0, noti);
+            last_action = current_action;
+        }
     }
 }
 
