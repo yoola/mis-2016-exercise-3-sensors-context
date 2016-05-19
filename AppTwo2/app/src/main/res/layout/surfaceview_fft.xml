@@ -12,32 +12,29 @@
     tools:context="com.apptwo2.apptwo2.MainActivity">
 
 
-    <Button
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Accelerometer"
-        android:id="@+id/button_acc"
+        android:id="@+id/xTextFFT"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="102dp"
-        android:onClick="GoToAcc"/>
+        android:layout_marginTop="5dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FFT"
-        android:id="@+id/button_fft"
+    <com.apptwo2.apptwo2.MySurfaceView
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:id="@+id/surfaceViewFFT"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="202dp"
-        android:onClick="GoToFFT"/>
+        android:layout_marginTop="20dp" />
 
-    <Button
-        android:id="@+id/button_not"
-        android:layout_width="wrap_content"
+    <SeekBar
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/seekBarFFT"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="createNotification"
-        android:text="Create Notification" >
-    </Button>
+        android:layout_marginBottom="20dp" />
 
 
 </RelativeLayout>

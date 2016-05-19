@@ -1,55 +1,36 @@
 package com.apptwo2.apptwo2;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.content.Intent;
 
-
-
-
-public class MainActivity extends AppCompatActivity{
+/**
+ * http://www.vogella.com/tutorials/AndroidNotifications/article.html
+ */
+public class NotificationActivity extends Activity {
 
     Button mButtonAcc;
     Button mButtonFFT;
     Button mButtonNot;
 
-
-
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mButtonAcc = (Button) findViewById(R.id.button_acc);
         mButtonFFT = (Button) findViewById(R.id.button_fft);
         mButtonNot = (Button) findViewById(R.id.button_not);
-
-    }
-
-    public void GoToAcc(View view){
-
-        Intent intent = new Intent(this, MainAccelerometer.class);
-        startActivity(intent);
-
-    }
-
-    public void GoToFFT(View view){
-
-        Intent intent = new Intent(this, MainFFT.class);
-        startActivity(intent);
     }
 
     public void createNotification(View view) {
-        newNotification(view);
-    }
-
-    public void newNotification(View view) {
-        // http://www.vogella.com/tutorials/AndroidNotifications/article.html
-        // Prepare intent which is triggered if the notification is selected
+        // Prepare intent which is triggered if the
+        // notification is selected
         Intent intent = new Intent(this, NotificationReceiverActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
@@ -69,5 +50,4 @@ public class MainActivity extends AppCompatActivity{
         notificationManager.notify(0, noti);
 
     }
-
 }
