@@ -40,15 +40,20 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
     private double magnitude = 0;
     private double pre_magnitude = 0;
 
-    private String[] action = {"You are sitting right now.", "You are walking right now.", "You are moving faster then walking right now."};
+    private String[] action = {"You are not moving right now.", "You are walking right now.", "You are moving faster then walking right now."};
     private String last_action = "";
     private int action_time = 0;
-    private double[] last_magnitudes = new double[20];
+
+    //private double[] last_magnitudes = new double[20];
     private boolean walking = false;
     private boolean driving = false;
     private int mWidth, mHeight;
 
     private RelativeLayout.LayoutParams Layout_param1; // for changing the window size
+
+    private int rate = 50;
+    private double[] last_magnitudes = new double[rate];
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,35 +184,32 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         mView.saveData(magnitude);
         mText.setText("Magnitude (yellow): "+ magnitude + "\n Counter: " + counter);
 
+        System.out.println(last_magnitudes.length);
+        System.out.println(action_time);
         last_magnitudes[action_time] = pre_magnitude; // noch pre magnitude später dann fft transformiterte mag
 
-        if (action_time == 19) {
+        if (action_time == rate - 1) {
             String current_action = "";
-            walking = true;
-            driving = true;
-            double temp = 0.0;
+            double mean = 0.0;
             for (double value : last_magnitudes) {
-                System.out.println(value);
-                temp = value;
-                if (value < 10 || value > -10) {
-                    walking = false;
-                    driving = false;
-                } else if (value < 15 || value > -15) {
-                    driving = false;
-                }
-
+                mean  += value;
             }
-            if (driving) {
+            mean  /= rate;
+            if (mean > 4.5) {
                 current_action = action[2];
-            } else if (walking) {
+            } else if(mean > 2) {
                 current_action = action[1];
             } else {
                 current_action = action[0];
             }
+
             //Toast.makeText(MainFFT.this, temp + "", Toast.LENGTH_SHORT).show();
             System.out.println(current_action);
+
+            System.out.println("MEAN: " + mean);
+
             newNotification(current_action); // sitting
-//            Toast.makeText(MainFFT.this, current_action, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainFFT.this, current_action + " " + mean, Toast.LENGTH_SHORT).show();
 
             action_time = 0;
         }
@@ -228,6 +230,7 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
                     .setContentTitle(current_action)
                     .setContentText("Subject").setSmallIcon(R.drawable.icon)
                     .setContentIntent(pIntent)
+                    .setSmallIcon(R.drawable.icon)
                     .addAction(R.drawable.icon, "See information.", pIntent).build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             // hide the notification after its selected
