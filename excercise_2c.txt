@@ -1,0 +1,2 @@
+Um den Context des Nutzers zu erraten, wählten wir die folgende Methode:
+Über einen längeren Zeitraum (= 50 Messdaten) wird die errechnete FFT-Magnitude gespeichert und der Mittelwert gebildet. Dieser Mittelwert wird dann einer Aktion zugeordnet. Wenn zum Beispiel der Mittelwert <= 2, dann bewegt sich die Person nicht genug, um als laufend oder anderes erkannt zu werden. Die Schwellwerte wurden empirisch festgestellt. Mögliche Bewegungsarten sind: Person bewegt sich nicht, Person läuft, Person ist schnelelr als laufen.

@@ -40,19 +40,16 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
     private double magnitude = 0;
     private double pre_magnitude = 0;
 
-    private String[] action = {"You are not moving right now.", "You are walking right now.", "You are running right now", "You are moving faster then running right now."};
+    private String[] action = {"You are not moving right now.", "You are walking right now.", "You are running right now.", "You are moving faster then running right now."};
     private String last_action = "";
     private int action_time = 0;
+    private int rate = 50;
+    private double[] last_magnitudes = new double[rate];
 
-    //private double[] last_magnitudes = new double[20];
-    private boolean walking = false;
-    private boolean driving = false;
     private int mWidth, mHeight;
 
     private RelativeLayout.LayoutParams Layout_param1; // for changing the window size
 
-    private int rate = 50;
-    private double[] last_magnitudes = new double[rate];
 
 
 
@@ -195,21 +192,16 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
                 mean  += value;
             }
             mean  /= rate;
-            if (mean > 6) {
+            if (mean > 4.5) {
                 current_action = action[3];
-            } else if (mean > 4.5) {
+            } else if(mean > 3.3) {
                 current_action = action[2];
-            } else if(mean > 2) {
+            } else if(mean > 1.1) {
                 current_action = action[1];
             } else {
                 current_action = action[0];
             }
-
-            //Toast.makeText(MainFFT.this, temp + "", Toast.LENGTH_SHORT).show();
-            System.out.println(current_action);
-
             System.out.println("MEAN: " + mean);
-
             newNotification(current_action); // sitting
             Toast.makeText(MainFFT.this, current_action + " " + mean, Toast.LENGTH_SHORT).show();
 
