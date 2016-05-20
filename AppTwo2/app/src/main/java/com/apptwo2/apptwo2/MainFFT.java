@@ -29,7 +29,7 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
 
     private final float[] gravity = new float[3];
     private final float[] linear_acceleration = new float[3];
-    private double[] X, xInput, yInput; // Input vector size mus be a power of 2
+    private double[] X, xInput, yInput; // Input vector size must be a power of 2
 
     private int mSensorDelay;
     private int N = 16;
@@ -73,26 +73,6 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         X = new double[N];
         xInput = new double[N];
         yInput = new double[N];
-
-        /*if(counter == N){
-
-            xInput = x;
-
-            for(int i = 0; i<=N; i++){
-
-                yInput[i] = 0;
-            }
-
-            FFT fft = new FFT(N);
-            fft.fft(xInput, yInput);
-
-            for(int j= 0; j<= N; j++){
-
-                magnitude += Math.sqrt(xInput[j]*xInput[j]+yInput[j]*yInput[j]);
-            }
-        }*/
-
-
 
 
 
@@ -147,7 +127,6 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
     public void onSensorChanged(SensorEvent event) {
 
         final float alpha = 0.8f;
-        double x,y,z;
 
         // Isolate the force of gravity with the low-pass filter.
         gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
