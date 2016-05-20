@@ -229,6 +229,7 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
                     .setContentTitle(current_action)
                     .setContentText("Subject").setSmallIcon(R.drawable.icon)
                     .setContentIntent(pIntent)
+                    .setSmallIcon(R.drawable.icon)
                     .addAction(R.drawable.icon, "See information.", pIntent).build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             // hide the notification after its selected
