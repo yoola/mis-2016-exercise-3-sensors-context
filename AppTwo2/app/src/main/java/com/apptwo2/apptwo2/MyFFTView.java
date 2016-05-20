@@ -19,6 +19,8 @@ public class MyFFTView extends View {
     private Path path1 = new Path();
     private double m;
 
+
+
     public MyFFTView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -32,10 +34,12 @@ public class MyFFTView extends View {
 
     @Override
     public void onDraw(Canvas canvas){
-        float ratio = getHeight()/40;
 
 
-        if (time_new == getWidth()) {
+        float ratio = getHeight()/300;
+
+
+        if (time_new >= getWidth()) {
             time_new = 0;
 
             path1 = new Path();
@@ -44,9 +48,9 @@ public class MyFFTView extends View {
         }
 
         time_old = time_new;
-        time_new++;
+        time_new+= 5;
 
-        m = ((getHeight() / 2) - ratio * magnitude_);
+        m = (getHeight() - ratio * magnitude_);
 
 
         mPaint.setColor(Color.GREEN);
@@ -57,14 +61,15 @@ public class MyFFTView extends View {
 
         mPaint.setTextSize(18f);
         mPaint.setColor(Color.BLACK);
-        canvas.drawText("10 - ", getWidth()-50f, getHeight()/4, mPaint);
-        canvas.drawText("0 - ", getWidth()-50f, getHeight()/2, mPaint);
-        canvas.drawText("-10 - ", getWidth()-50f, 3*(getHeight()/4), mPaint);
+        canvas.drawText("200 - ", getWidth()-50f, (getHeight()/3), mPaint);
+        canvas.drawText("100 - ", getWidth()-50f, 2*(getHeight()/3), mPaint);
+        canvas.drawText("0 - ", getWidth()-50f, getHeight()-5, mPaint);
     }
 
     public void saveData(double magnitude){
 
         this.magnitude_ = magnitude;
+        System.out.print(magnitude_);
 
         invalidate();
     }
