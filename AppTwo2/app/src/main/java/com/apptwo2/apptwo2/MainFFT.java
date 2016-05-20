@@ -29,10 +29,10 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
 
     private final float[] gravity = new float[3];
     private final float[] linear_acceleration = new float[3];
-    private double[] x, xInput, yInput; // Input vector size mus be a power of 2
+    private double[] X, xInput, yInput; // Input vector size mus be a power of 2
 
     private int mSensorDelay;
-    private int N = 64;
+    private int N = 16;
     private int counter = 0;
 
     private double magnitude = 0;
@@ -70,7 +70,7 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         mSeekBar.setProgress(0);
         mSeekBar.setMax(3);
 
-        x = new double[N];
+        X = new double[N];
         xInput = new double[N];
         yInput = new double[N];
 
@@ -147,6 +147,7 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
     public void onSensorChanged(SensorEvent event) {
 
         final float alpha = 0.8f;
+        double x,y,z;
 
         // Isolate the force of gravity with the low-pass filter.
         gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
@@ -158,27 +159,54 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         linear_acceleration[1] = event.values[1] - gravity[1];
         linear_acceleration[2] = event.values[2] - gravity[2];
 
+
+
         // https://developer.android.com/guide/topics/sensors/sensors_motion.html#sensors-motion-gyro
 
-        pre_magnitude = (double)Math.sqrt(gravity[0]*gravity[0] +
-                gravity[1]*gravity[1] +
-                gravity[2]*gravity[2]);
+        pre_magnitude = Math.sqrt(linear_acceleration[0]*linear_acceleration[0] +
+                linear_acceleration[1]*linear_acceleration[1] +
+                linear_acceleration[2]*linear_acceleration[2]);
 
 
         if(counter < N){
 
-            x[counter] = pre_magnitude;
+            X[counter] = pre_magnitude;
             counter++;
-        }else{
-
-            counter = 0;
         }
 
 
 
 
+        if(counter == N){
+
+            magnitude = 0;
+
+            mText2.setText("Magnitude gets computed");
+
+            xInput = X;
+
+            for(int i = 0; i<N; i++){
+
+                yInput[i] = 0.0;
+            }
+
+
+
+            FFT fft = new FFT(N);
+            fft.fft(xInput, yInput);
+
+            for(int j= 0; j< N; j++) {
+
+                magnitude += Math.sqrt((xInput[j] * xInput[j] + yInput[j] * yInput[j]));
+            }
+
+
+            counter = 0;
+
+        }
+
+        mView.saveData(magnitude);
         mText.setText("Magnitude (yellow): "+ magnitude + "\n Counter: " + counter);
-        mView.saveData(pre_magnitude);
 
         last_magnitudes[action_time] = pre_magnitude; // noch pre magnitude später dann fft transformiterte mag
 
