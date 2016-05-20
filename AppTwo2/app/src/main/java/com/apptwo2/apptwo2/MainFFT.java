@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,6 +13,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,8 +43,17 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
     private String[] action = {"You are not moving right now.", "You are walking right now.", "You are running right now", "You are moving faster then running right now."};
     private String last_action = "";
     private int action_time = 0;
+
+    //private double[] last_magnitudes = new double[20];
+    private boolean walking = false;
+    private boolean driving = false;
+    private int mWidth, mHeight;
+
+    private RelativeLayout.LayoutParams Layout_param1; // for changing the window size
+
     private int rate = 50;
     private double[] last_magnitudes = new double[rate];
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +63,17 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         mView = (MyFFTView) findViewById(R.id.viewF);
         mText = (TextView)findViewById(R.id.textF);
         mText2 = (TextView)findViewById(R.id.textF2);
+        mView.setBackgroundColor(Color.BLACK);
 
 
+        Layout_param1 = (RelativeLayout.LayoutParams) mView.getLayoutParams();
+
+        //Layout_param.width = getWidth();
+        //mView.setLayoutParams(Layout_param);
+
+        X = new double[N];
+        xInput = new double[N];
+        yInput = new double[N];
 
         // Get an instance to the accelerometer
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -66,41 +86,23 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         //http://stackoverflow.com/questions/8956218/android-seekbar-setonseekbarchangelistener
 
         mSeekBar = (SeekBar)findViewById(R.id.seekBarF);
-        mSeekBar.setProgress(0);
-        mSeekBar.setMax(3);
-
-        X = new double[N];
-        xInput = new double[N];
-        yInput = new double[N];
-
+        mSeekBar.setProgress(400);
+        mSeekBar.setMax(400);
 
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                switch (progress){
-                    case 0:
 
-                        //suitable for monitoring typical screen orientation changes and uses a delay of 200,000 microseconds
-                        Toast.makeText(MainFFT.this, "SENSOR_DELAY_NORMAL : 200.000 ms delay", Toast.LENGTH_SHORT).show();
-                        mSensorDelay = SensorManager.SENSOR_DELAY_NORMAL;
-                        break;
-                    case 1:
-                        // 0 microsecond delay
-                        Toast.makeText(MainFFT.this, "SENSOR_DELAY_FASTEST : 0 ms delay", Toast.LENGTH_SHORT).show();
-                        mSensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
-                        break;
-                    case 2:
-                        // 20,000 microsecond delay
-                        Toast.makeText(MainFFT.this, "SENSOR_DELAY_GAME : 20.000 ms delay", Toast.LENGTH_SHORT).show();
-                        mSensorDelay = SensorManager.SENSOR_DELAY_GAME;
-                        break;
-                    case 3:
-                        // 60,000 microsecond delay
-                        Toast.makeText(MainFFT.this, "Set: SENSOR_DELAY_UI : 60.000 ms delay", Toast.LENGTH_SHORT).show();
-                        mSensorDelay = SensorManager.SENSOR_DELAY_UI;
-                        break;
-                }
+
+                mText2.setText("Window size: "+progress);
+
+                setWidth(progress);
+                setHeight(progress);
+                Layout_param1.width = getWidth();
+                Layout_param1.height = getHeight();
+                mView.setLayoutParams(Layout_param1);
+
             }
 
             @Override
@@ -158,9 +160,6 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         if(counter == N){
 
             magnitude = 0;
-
-            mText2.setText("Magnitude gets computed");
-
             xInput = X;
 
             for(int i = 0; i<N; i++){
@@ -177,7 +176,6 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
 
                 magnitude += Math.sqrt((xInput[j] * xInput[j] + yInput[j] * yInput[j]));
             }
-
 
             counter = 0;
 
@@ -206,7 +204,12 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
             } else {
                 current_action = action[0];
             }
+
+            //Toast.makeText(MainFFT.this, temp + "", Toast.LENGTH_SHORT).show();
+            System.out.println(current_action);
+
             System.out.println("MEAN: " + mean);
+
             newNotification(current_action); // sitting
             Toast.makeText(MainFFT.this, current_action + " " + mean, Toast.LENGTH_SHORT).show();
 
@@ -238,6 +241,26 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
             notificationManager.notify(0, noti);
             last_action = current_action;
         }
+    }
+
+    public void setWidth(int Width){
+
+        this.mWidth = Width;
+    }
+
+    public int getWidth(){
+
+        return this.mWidth;
+    }
+
+    public void setHeight(int Height){
+
+        this.mHeight = Height;
+    }
+
+    public int getHeight(){
+
+        return this.mHeight;
     }
 }
 
