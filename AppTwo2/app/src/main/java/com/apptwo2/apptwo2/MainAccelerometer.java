@@ -126,7 +126,7 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
 
 
         xText.setText(" X (green): " + linear_acceleration[0] + "\n Y (red): " + linear_acceleration[1] +
-                "\n Z (blue): " + linear_acceleration[2] + "\n Magnitude (yellow): "+ magnitude);
+                "\n Z (blue): " + linear_acceleration[2] + "\n Magnitude (white): "+ magnitude);
 
 
         view.saveData(linear_acceleration, magnitude, mSensorDelay);

@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity{
         // Build notification
         // Actions are just fake
         Notification noti = new Notification.Builder(this)
-                .setContentTitle("New mail from " + "test@gmail.com")
-                .setContentText("Subject").setSmallIcon(R.drawable.icon)
+                .setContentTitle("Action")
+                .setContentText("Movement will be calculated: Click FFT").setSmallIcon(R.drawable.icon)
                 .setContentIntent(pIntent)
                 .addAction(R.drawable.icon, "Call", pIntent)
                 .addAction(R.drawable.icon, "More", pIntent)

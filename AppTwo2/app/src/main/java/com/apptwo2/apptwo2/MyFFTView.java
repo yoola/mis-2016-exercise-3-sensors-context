@@ -1,6 +1,7 @@
 package com.apptwo2.apptwo2;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,7 +21,6 @@ public class MyFFTView extends View {
     private double m;
 
 
-
     public MyFFTView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -35,41 +35,26 @@ public class MyFFTView extends View {
     @Override
     public void onDraw(Canvas canvas){
 
-        System.out.print("Width: "+getWidth()+"\n");
-        System.out.print("Height: "+getHeight()+ "\n");
-
-
         float ratio = getHeight()/300;
-
-
-
 
         if (time_new >= getWidth()) {
             time_new = 0;
-
             path1 = new Path();
-
-
         }
 
         time_old = time_new;
         time_new+= 5;
 
         m = (getHeight() - ratio * magnitude_);
-        System.out.print("m: "+m);
-
 
         mPaint.setColor(Color.WHITE);
         path1.lineTo(time_old, (float)m);
         canvas.drawPath(path1, mPaint);
-
     }
 
     public void saveData(double magnitude){
 
         this.magnitude_ = magnitude;
-
-
         invalidate();
     }
 }

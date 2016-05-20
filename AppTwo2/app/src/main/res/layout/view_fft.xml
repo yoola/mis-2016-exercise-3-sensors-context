@@ -31,7 +31,7 @@
 
     <com.apptwo2.apptwo2.MyFFTView
         android:layout_width="fill_parent"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         android:id="@+id/viewF"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"

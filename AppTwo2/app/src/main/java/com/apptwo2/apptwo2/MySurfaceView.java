@@ -55,7 +55,7 @@ public class MySurfaceView extends View {
         }
 
         time_old = time_new;
-        time_new++;
+        time_new+= 3;
 
         x = ((getHeight() / 2) - ratio * data_[0]);
         y = ((getHeight() / 2) - ratio * data_[1]);

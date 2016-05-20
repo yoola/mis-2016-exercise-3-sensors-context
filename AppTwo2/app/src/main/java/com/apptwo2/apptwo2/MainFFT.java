@@ -63,8 +63,8 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         mView.setBackgroundColor(Color.BLACK);
 
 
-        Layout_param1 = (RelativeLayout.LayoutParams) mView.getLayoutParams();
 
+        Layout_param1 = (RelativeLayout.LayoutParams) mView.getLayoutParams();
         //Layout_param.width = getWidth();
         //mView.setLayoutParams(Layout_param);
 
@@ -92,11 +92,11 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
 
-                mText2.setText("Window size: "+progress);
+                mText2.setText("Window size: "+ progress);
 
                 setWidth(progress);
                 setHeight(progress);
-                Layout_param1.width = getWidth();
+                Layout_param1.width = getWidth()+32;
                 Layout_param1.height = getHeight();
                 mView.setLayoutParams(Layout_param1);
 
@@ -179,11 +179,11 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
         }
 
         mView.saveData(magnitude);
-        mText.setText("Magnitude (yellow): "+ magnitude + "\n Counter: " + counter);
+        mText.setText("Magnitude (white): "+ magnitude + "\nSample count: " + counter);
 
-        System.out.println(last_magnitudes.length);
-        System.out.println(action_time);
-        last_magnitudes[action_time] = magnitude; // noch pre magnitude später dann fft transformiterte mag
+        //System.out.println(last_magnitudes.length);
+        //System.out.println(action_time);
+        last_magnitudes[action_time] = magnitude;
 
         if (action_time == rate - 1) {
             String current_action = "";
@@ -192,16 +192,16 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
                 mean  += value;
             }
             mean  /= rate;
-            if (mean > 200) {
+            if (mean > 400) {
                 current_action = action[3];
-            } else if(mean > 80) {
+            } else if(mean > 100) {
                 current_action = action[2];
             } else if(mean > 40) {
                 current_action = action[1];
             } else {
                 current_action = action[0];
             }
-            System.out.println("MEAN: " + mean);
+            //System.out.println("MEAN: " + mean);
             newNotification(current_action); // sitting
             Toast.makeText(MainFFT.this, current_action + " " + mean, Toast.LENGTH_SHORT).show();
 
@@ -222,7 +222,7 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
             // Actions are just fake
             Notification noti = new Notification.Builder(this)
                     .setContentTitle(current_action)
-                    .setContentText("Subject").setSmallIcon(R.drawable.icon)
+                    .setContentText("Action calculated").setSmallIcon(R.drawable.icon)
                     .setContentIntent(pIntent)
                     .setSmallIcon(R.drawable.icon).build();
 //                    .addAction(R.drawable.icon, "See information.", pIntent).build();
