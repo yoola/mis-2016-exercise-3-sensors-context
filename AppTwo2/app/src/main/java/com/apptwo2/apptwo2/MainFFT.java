@@ -183,7 +183,7 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
 
         System.out.println(last_magnitudes.length);
         System.out.println(action_time);
-        last_magnitudes[action_time] = pre_magnitude; // noch pre magnitude später dann fft transformiterte mag
+        last_magnitudes[action_time] = magnitude; // noch pre magnitude später dann fft transformiterte mag
 
         if (action_time == rate - 1) {
             String current_action = "";
@@ -192,11 +192,11 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
                 mean  += value;
             }
             mean  /= rate;
-            if (mean > 4.5) {
+            if (mean > 200) {
                 current_action = action[3];
-            } else if(mean > 3.3) {
+            } else if(mean > 80) {
                 current_action = action[2];
-            } else if(mean > 1.1) {
+            } else if(mean > 40) {
                 current_action = action[1];
             } else {
                 current_action = action[0];
@@ -224,8 +224,8 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
                     .setContentTitle(current_action)
                     .setContentText("Subject").setSmallIcon(R.drawable.icon)
                     .setContentIntent(pIntent)
-                    .setSmallIcon(R.drawable.icon)
-                    .addAction(R.drawable.icon, "See information.", pIntent).build();
+                    .setSmallIcon(R.drawable.icon).build();
+//                    .addAction(R.drawable.icon, "See information.", pIntent).build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             // hide the notification after its selected
             noti.flags |= Notification.FLAG_AUTO_CANCEL;
