@@ -38,7 +38,7 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
     private double magnitude = 0;
     private double pre_magnitude = 0;
 
-    private String[] action = {"You are not moving right now.", "You are walking right now.", "You are moving faster then walking right now."};
+    private String[] action = {"You are not moving right now.", "You are walking right now.", "You are running right now", "You are moving faster then running right now."};
     private String last_action = "";
     private int action_time = 0;
     private int rate = 50;
@@ -197,7 +197,9 @@ public class MainFFT extends AppCompatActivity implements SensorEventListener{
                 mean  += value;
             }
             mean  /= rate;
-            if (mean > 4.5) {
+            if (mean > 6) {
+                current_action = action[3];
+            } else if (mean > 4.5) {
                 current_action = action[2];
             } else if(mean > 2) {
                 current_action = action[1];
