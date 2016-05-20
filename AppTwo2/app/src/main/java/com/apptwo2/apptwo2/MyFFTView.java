@@ -35,8 +35,13 @@ public class MyFFTView extends View {
     @Override
     public void onDraw(Canvas canvas){
 
+        System.out.print("Width: "+getWidth()+"\n");
+        System.out.print("Height: "+getHeight()+ "\n");
+
 
         float ratio = getHeight()/300;
+
+
 
 
         if (time_new >= getWidth()) {
@@ -51,25 +56,19 @@ public class MyFFTView extends View {
         time_new+= 5;
 
         m = (getHeight() - ratio * magnitude_);
+        System.out.print("m: "+m);
 
 
-        mPaint.setColor(Color.GREEN);
+        mPaint.setColor(Color.WHITE);
         path1.lineTo(time_old, (float)m);
         canvas.drawPath(path1, mPaint);
 
-
-
-        mPaint.setTextSize(18f);
-        mPaint.setColor(Color.BLACK);
-        canvas.drawText("200 - ", getWidth()-50f, (getHeight()/3), mPaint);
-        canvas.drawText("100 - ", getWidth()-50f, 2*(getHeight()/3), mPaint);
-        canvas.drawText("0 - ", getWidth()-50f, getHeight()-5, mPaint);
     }
 
     public void saveData(double magnitude){
 
         this.magnitude_ = magnitude;
-        System.out.print(magnitude_);
+
 
         invalidate();
     }

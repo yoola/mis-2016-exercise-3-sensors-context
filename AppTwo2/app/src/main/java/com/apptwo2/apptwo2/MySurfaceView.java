@@ -74,7 +74,7 @@ public class MySurfaceView extends View {
         path3.lineTo(time_old, z);
         canvas.drawPath(path3, mPaint);
 
-        mPaint.setColor(Color.YELLOW);
+        mPaint.setColor(Color.WHITE);
         path4.lineTo(time_old, m);
         canvas.drawPath(path4, mPaint);
 

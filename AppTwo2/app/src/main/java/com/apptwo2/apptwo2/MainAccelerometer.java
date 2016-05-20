@@ -1,6 +1,7 @@
 package com.apptwo2.apptwo2;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -42,6 +43,7 @@ public class MainAccelerometer extends AppCompatActivity implements SensorEventL
 
 
         xText = (TextView)findViewById(R.id.xText);
+        view.setBackgroundColor(Color.BLACK);
 
         // Setting the seekbar
         //http://stackoverflow.com/questions/8956218/android-seekbar-setonseekbarchangelistener
